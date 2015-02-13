@@ -1,91 +1,279 @@
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class FormAutomation extends JFrame {
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+public class FormAutomation extends JDialog {
+
+	private static WebDriver driver = new FirefoxDriver();
 	public static int formFlag;
 	public static int recordNumber;
-	public static int flag = 0;
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1028709970893522753L;
-	private JPanel contentPane;
+	private static final long serialVersionUID = 3190083073737509914L;
+	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
 
-	/**
-	 * Create the frame.
-	 */
+	public static void main(String[] args) throws IOException {
+		try {
+			FormAutomation dialog = new FormAutomation();
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(formFlag);
+		System.out.println(recordNumber);
+		automation();
+	}
+
+	private static void automation() throws IOException {
+		// Read in the Excel file
+		InputStream ExcelFileToRead = new FileInputStream(
+				"US_Names_Addresses.xlsx");
+
+		// Make a .xlsx workbook from .xlsx file
+		XSSFWorkbook workBook = new XSSFWorkbook(ExcelFileToRead);
+
+		// Get the sheet from the .xlsx workbook
+		XSSFSheet sheet = workBook.getSheetAt(0);
+
+		// Declare variables for manipulation of .xlsx workbook
+		XSSFRow row;
+		XSSFCell cell;
+
+		// Define Iterators for the different sheets
+		Iterator<Row> rowIterator = sheet.rowIterator();
+
+		// Open Page, Log in, Start the form
+		driver.get("https://webforms-qa.asu.edu/node/5771");
+		driver.findElement(By.id("username")).sendKeys("gpandey2");
+		driver.findElement(By.id("password")).sendKeys("Imthe18beastasu12");
+		driver.findElement(By.className("submit")).click();
+
+		// Wait for the page to load up!
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By
+				.id("edit-submit--2")));
+
+		// Skip the column headings and already executed rows
+		row = (XSSFRow) rowIterator.next();
+		for (int i = 1; i <= 20; i++) {
+			row = (XSSFRow) rowIterator.next();
+		}
+
+		// Run 10 times
+		for (int i = 1; i <= 10; i++) {
+
+			// Initialize the row,cell variable
+			row = (XSSFRow) rowIterator.next();
+			Iterator<Cell> cells = row.cellIterator();
+
+			// Select student type
+			Select dropdown = new Select(driver.findElement(By
+					.id("edit-student-type")));
+			dropdown.selectByValue("First Time Freshman");
+
+			// Select program plan
+			dropdown = new Select(driver.findElement(By.id("edit-prog-plan")));
+			dropdown.selectByValue("Marketing (PhD) 1");
+
+			// Select program plan
+			dropdown = new Select(driver.findElement(By.id("edit-start-date")));
+			dropdown.selectByValue("a0Jd000000CpH9GEAV");
+
+			// First Name
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-first-name")).sendKeys(
+					cell.getStringCellValue());
+
+			// Last name
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-last-name")).sendKeys(
+					cell.getStringCellValue());
+
+			// Email
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-email")).sendKeys(
+					cell.getStringCellValue());
+
+			// Phone
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-phone")).sendKeys(
+					cell.getStringCellValue());
+
+			// Zip
+			cell = (XSSFCell) cells.next();
+			double zipd = cell.getNumericCellValue();
+			int zipn = (int) zipd;
+			String zip = Integer.toString(zipn);
+			driver.findElement(By.id("edit-zipcode")).sendKeys(zip);
+
+			// // Street
+			// cell = (XSSFCell) cells.next();
+			// driver.findElement(By.id("edit-asu-rfi-dedupe-street-und-0-value"))
+			// .sendKeys(cell.getStringCellValue());
+			//
+			// // City
+			// cell = (XSSFCell) cells.next();
+			// driver.findElement(By.id("edit-asu-rfi-dedupe-city-und-0-value"))
+			// .sendKeys(cell.getStringCellValue());
+			//
+			// // State
+			// cell = (XSSFCell) cells.next();
+			// driver.findElement(By.id("edit-asu-rfi-dedupe-state-und-0-value"))
+			// .sendKeys(cell.getStringCellValue());
+			//
+
+			//
+
+			//
+			// // Birth Date
+			// driver.findElement(
+			// By.id("edit-asu-rfi-dedupe-birth-date-und-0-value-datepicker-popup-0"))
+			// .clear();
+			// driver.findElement(
+			// By.id("edit-asu-rfi-dedupe-birth-date-und-0-value-datepicker-popup-0"))
+			// .sendKeys("01/01/2014");
+			//
+			// // Country
+			// driver.findElement(By.id("edit-asu-rfi-dedupe-country-und-0-value"))
+			// .sendKeys("United States");
+			//
+			// // This student is an international student checkbox
+			//
+			// // Veteran Status
+			//
+			// // SMS
+			//
+			// // This submission matches multiple items checkbox
+			//
+			// // Status drop down
+			//
+			// // Comments
+			// //
+			// driver.findElement(By.id("edit-asu-rfi-dedupe-comments-und-0-value"))
+			// // .sendKeys("May the force be with you!");
+			//
+			// // Requesting Site dropdown
+			// new Select(driver.findElement(By
+			// .id("edit-asu-rfi-dedupe-client-reference-und")))
+			// .selectByVisibleText("TEST");
+			//
+			// // Prod or test dropdown
+			// new Select(driver.findElement(By
+			// .id("edit-asu-rfi-dedupe-prod-test-flag-und")))
+			// .selectByVisibleText("Prod");
+			//
+			// // Nid
+			// cell = (XSSFCell) cells.next();
+			// double nidd = cell.getNumericCellValue();
+			// int nidn = (int) nidd;
+			// String nid = Integer.toString(nidn);
+			// driver.findElement(
+			// By.id("edit-asu-rfi-dedupe-remote-nid-und-0-value"))
+			// .sendKeys(nid);
+			//
+			// // Hash
+			// cell = (XSSFCell) cells.next();
+			// driver.findElement(
+			// By.id("edit-asu-rfi-dedupe-request-hash-und-0-value"))
+			// .sendKeys(cell.getStringCellValue());
+			//
+			// // Publish button
+			// driver.findElement(By.id("edit-title")).clear();
+			// driver.findElement(By.id("edit-title")).sendKeys("test" + i);
+			// driver.findElement(By.id("edit-submit")).click();
+			//
+			// // Wait
+			// WebDriverWait wait = new WebDriverWait(driver, 300);
+			// wait.until(ExpectedConditions.visibilityOfElementLocated(By
+			// .id("edit-subject")));
+		}
+
+	}
+
 	public FormAutomation() {
-		// Window properties
-		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Form Selection");
+		setModal(true);
 		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(27, 47, 122, 33);
-		contentPane.add(panel);
+		panel.setBounds(10, 40, 122, 33);
+		contentPanel.add(panel);
 
-		JLabel lblSelectForm = new JLabel("Select Form: ");
-		lblSelectForm.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		panel.add(lblSelectForm);
+		JLabel label = new JLabel("Select Form: ");
+		label.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		panel.add(label);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(196, 47, 217, 33);
-		contentPane.add(panel_1);
+		panel_1.setBounds(189, 40, 217, 33);
+		contentPanel.add(panel_1);
 
 		String[] items = { "form1", "form2" };
 		// Windows builder does not support JRE 7 yet -> hence the warning
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-		final JComboBox<String> comboBox = new JComboBox(items);
+		final JComboBox comboBox = new JComboBox(items);
 		comboBox.setPreferredSize(new Dimension(200, 25));
-
 		panel_1.add(comboBox);
 
 		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(10, 117, 153, 33);
-		contentPane.add(panel_2);
+		panel_2.setBounds(10, 113, 153, 33);
+		contentPanel.add(panel_2);
 
-		JLabel lblSelectOf = new JLabel("Select # of records:");
-		lblSelectOf.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		panel_2.add(lblSelectOf);
+		JLabel label_1 = new JLabel("Select # of records:");
+		label_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		panel_2.add(label_1);
 
 		JPanel panel_3 = new JPanel();
-		panel_3.setBounds(247, 117, 122, 33);
-		contentPane.add(panel_3);
+		panel_3.setBounds(235, 113, 122, 33);
+		contentPanel.add(panel_3);
 
 		textField = new JTextField();
-		panel_3.add(textField);
 		textField.setColumns(10);
+		panel_3.add(textField);
 
 		JPanel panel_4 = new JPanel();
-		panel_4.setBounds(100, 192, 226, 33);
-		contentPane.add(panel_4);
+		panel_4.setBounds(98, 191, 226, 37);
+		contentPanel.add(panel_4);
 
-		JButton btnLetTheAutomation = new JButton("Let the automation begin!");
-		btnLetTheAutomation.addActionListener(new ActionListener() {
+		JButton button = new JButton("Let the automation begin!");
+		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				formFlag = comboBox.getSelectedIndex();
 				recordNumber = Integer.parseInt(textField.getText());
-				flag = 1;
+				dispose();
 			}
 		});
-		btnLetTheAutomation.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		panel_4.add(btnLetTheAutomation);
+		button.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		panel_4.add(button);
 	}
+
 }
