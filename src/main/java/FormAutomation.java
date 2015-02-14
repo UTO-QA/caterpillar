@@ -70,10 +70,7 @@ public class FormAutomation extends JDialog {
 		Iterator<Row> rowIterator = sheet.rowIterator();
 
 		// Open Page, Log in, Start the form
-		driver.get("https://webforms-qa.asu.edu/node/5771");
-		driver.findElement(By.id("username")).sendKeys("gpandey2");
-		driver.findElement(By.id("password")).sendKeys("Imthe18beastasu12");
-		driver.findElement(By.className("submit")).click();
+		driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
 
 		// Wait for the page to load up!
 		WebDriverWait wait = new WebDriverWait(driver, 300);
