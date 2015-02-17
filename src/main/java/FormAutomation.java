@@ -75,33 +75,33 @@ public class FormAutomation extends JDialog {
 		// Wait for the page to load up!
 		WebDriverWait wait = new WebDriverWait(driver, 300);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By
-				.id("edit-submit--2")));
+				.id("edit-questions")));
 
 		// Skip the column headings and already executed rows
 		row = (XSSFRow) rowIterator.next();
-		for (int i = 1; i <= 20; i++) {
+		for (int i = 1; i < 2; i++) {
 			row = (XSSFRow) rowIterator.next();
 		}
 
-		// Run 10 times
-		for (int i = 1; i <= 10; i++) {
+		// Initialize the cell variable
+		Iterator<Cell> cells = row.cellIterator();
 
-			// Initialize the row,cell variable
-			row = (XSSFRow) rowIterator.next();
-			Iterator<Cell> cells = row.cellIterator();
+		for (int i = 1; i < 2; i++) {
+			// My Program Interest
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.click();
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/div/ul/li[5]"))
+					.click();
 
-			// Select student type
-			Select dropdown = new Select(driver.findElement(By
-					.id("edit-student-type")));
-			dropdown.selectByValue("First Time Freshman");
-
-			// Select program plan
-			dropdown = new Select(driver.findElement(By.id("edit-prog-plan")));
-			dropdown.selectByValue("Marketing (PhD) 1");
-
-			// Select program plan
-			dropdown = new Select(driver.findElement(By.id("edit-start-date")));
-			dropdown.selectByValue("a0Jd000000CpH9GEAV");
+			// My Start Date
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.click();
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li[3]"))
+					.click();
 
 			// First Name
 			cell = (XSSFCell) cells.next();
@@ -112,7 +112,7 @@ public class FormAutomation extends JDialog {
 			cell = (XSSFCell) cells.next();
 			driver.findElement(By.id("edit-last-name")).sendKeys(
 					cell.getStringCellValue());
-
+			
 			// Email
 			cell = (XSSFCell) cells.next();
 			driver.findElement(By.id("edit-email")).sendKeys(
@@ -122,13 +122,13 @@ public class FormAutomation extends JDialog {
 			cell = (XSSFCell) cells.next();
 			driver.findElement(By.id("edit-phone")).sendKeys(
 					cell.getStringCellValue());
-
-			// Zip
-			cell = (XSSFCell) cells.next();
-			double zipd = cell.getNumericCellValue();
-			int zipn = (int) zipd;
-			String zip = Integer.toString(zipn);
-			driver.findElement(By.id("edit-zipcode")).sendKeys(zip);
+			//
+			// // Zip
+			// cell = (XSSFCell) cells.next();
+			// double zipd = cell.getNumericCellValue();
+			// int zipn = (int) zipd;
+			// String zip = Integer.toString(zipn);
+			// driver.findElement(By.id("edit-zipcode")).sendKeys(zip);
 
 			// // Street
 			// cell = (XSSFCell) cells.next();
