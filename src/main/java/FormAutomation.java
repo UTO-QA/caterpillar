@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -26,7 +27,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FormAutomation extends JDialog {
@@ -79,14 +79,23 @@ public class FormAutomation extends JDialog {
 
 		// Skip the column headings and already executed rows
 		row = (XSSFRow) rowIterator.next();
-		for (int i = 1; i < 2; i++) {
+		for (int i = 0; i < 1; i++) {
 			row = (XSSFRow) rowIterator.next();
 		}
 
 		// Initialize the cell variable
 		Iterator<Cell> cells = row.cellIterator();
 
+		// Check if record already used
+		cell = (XSSFCell) cells.next();
 		for (int i = 1; i < 2; i++) {
+			while (cell.getStringCellValue().equals("True")) {
+				row = (XSSFRow) rowIterator.next();
+			}
+
+			// Mark done
+			cell.setCellValue("True");
+
 			// My Program Interest
 			driver.findElement(
 					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
@@ -105,24 +114,29 @@ public class FormAutomation extends JDialog {
 
 			// First Name
 			cell = (XSSFCell) cells.next();
-			driver.findElement(By.id("edit-first-name")).sendKeys(
-					cell.getStringCellValue());
+			String fname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-first-name")).sendKeys(fname);
 
 			// Last name
 			cell = (XSSFCell) cells.next();
-			driver.findElement(By.id("edit-last-name")).sendKeys(
-					cell.getStringCellValue());
-			
+			String lname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-last-name")).sendKeys(lname);
+
 			// Email
 			cell = (XSSFCell) cells.next();
 			driver.findElement(By.id("edit-email")).sendKeys(
-					cell.getStringCellValue());
+					fname + "." + lname + "@email.com");
 
 			// Phone
 			cell = (XSSFCell) cells.next();
 			driver.findElement(By.id("edit-phone")).sendKeys(
 					cell.getStringCellValue());
-			//
+
+			FileOutputStream fileOut = new FileOutputStream(
+					"US_Names_Addresses.xlsx");
+			workBook.write(fileOut);
+			fileOut.close();
+
 			// // Zip
 			// cell = (XSSFCell) cells.next();
 			// double zipd = cell.getNumericCellValue();
