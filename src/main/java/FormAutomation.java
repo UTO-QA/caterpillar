@@ -146,7 +146,7 @@ public class FormAutomation extends JDialog {
 		Iterator<Row> rowIterator = sheet.rowIterator();
 
 		// Open Page, Log in, Start the form
-		driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
+		driver.get("***sanitized***");
 
 		// Wait for the page to load up!
 		WebDriverWait wait = new WebDriverWait(driver, 300);
@@ -278,7 +278,7 @@ public class FormAutomation extends JDialog {
 			fileOut.close();
 
 			// Open Page, Log in, Start the form
-			driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
+			driver.get("***sanitized***");
 
 			// Wait for the page to load up!
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By
