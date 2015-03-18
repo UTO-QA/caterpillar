@@ -7,7 +7,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -37,8 +40,80 @@ public class FormAutomation extends JDialog {
 	private static final long serialVersionUID = 3190083073737509914L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
+	public static final Map<String, String> STATE_MAP;
+	static {
+		STATE_MAP = new HashMap<String, String>();
+		STATE_MAP.put("AL", "Alabama");
+		STATE_MAP.put("AK", "Alaska");
+		STATE_MAP.put("AB", "Alberta");
+		STATE_MAP.put("AZ", "Arizona");
+		STATE_MAP.put("AR", "Arkansas");
+		STATE_MAP.put("BC", "British Columbia");
+		STATE_MAP.put("CA", "California");
+		STATE_MAP.put("CO", "Colorado");
+		STATE_MAP.put("CT", "Connecticut");
+		STATE_MAP.put("DE", "Delaware");
+		STATE_MAP.put("DC", "District Of Columbia");
+		STATE_MAP.put("FL", "Florida");
+		STATE_MAP.put("GA", "Georgia");
+		STATE_MAP.put("GU", "Guam");
+		STATE_MAP.put("HI", "Hawaii");
+		STATE_MAP.put("ID", "Idaho");
+		STATE_MAP.put("IL", "Illinois");
+		STATE_MAP.put("IN", "Indiana");
+		STATE_MAP.put("IA", "Iowa");
+		STATE_MAP.put("KS", "Kansas");
+		STATE_MAP.put("KY", "Kentucky");
+		STATE_MAP.put("LA", "Louisiana");
+		STATE_MAP.put("ME", "Maine");
+		STATE_MAP.put("MB", "Manitoba");
+		STATE_MAP.put("MD", "Maryland");
+		STATE_MAP.put("MA", "Massachusetts");
+		STATE_MAP.put("MI", "Michigan");
+		STATE_MAP.put("MN", "Minnesota");
+		STATE_MAP.put("MS", "Mississippi");
+		STATE_MAP.put("MO", "Missouri");
+		STATE_MAP.put("MT", "Montana");
+		STATE_MAP.put("NE", "Nebraska");
+		STATE_MAP.put("NV", "Nevada");
+		STATE_MAP.put("NB", "New Brunswick");
+		STATE_MAP.put("NH", "New Hampshire");
+		STATE_MAP.put("NJ", "New Jersey");
+		STATE_MAP.put("NM", "New Mexico");
+		STATE_MAP.put("NY", "New York");
+		STATE_MAP.put("NF", "Newfoundland");
+		STATE_MAP.put("NC", "North Carolina");
+		STATE_MAP.put("ND", "North Dakota");
+		STATE_MAP.put("NT", "Northwest Territories");
+		STATE_MAP.put("NS", "Nova Scotia");
+		STATE_MAP.put("NU", "Nunavut");
+		STATE_MAP.put("OH", "Ohio");
+		STATE_MAP.put("OK", "Oklahoma");
+		STATE_MAP.put("ON", "Ontario");
+		STATE_MAP.put("OR", "Oregon");
+		STATE_MAP.put("PA", "Pennsylvania");
+		STATE_MAP.put("PE", "Prince Edward Island");
+		STATE_MAP.put("PR", "Puerto Rico");
+		STATE_MAP.put("QC", "Quebec");
+		STATE_MAP.put("RI", "Rhode Island");
+		STATE_MAP.put("SK", "Saskatchewan");
+		STATE_MAP.put("SC", "South Carolina");
+		STATE_MAP.put("SD", "South Dakota");
+		STATE_MAP.put("TN", "Tennessee");
+		STATE_MAP.put("TX", "Texas");
+		STATE_MAP.put("UT", "Utah");
+		STATE_MAP.put("VT", "Vermont");
+		STATE_MAP.put("VI", "Virgin Islands");
+		STATE_MAP.put("VA", "Virginia");
+		STATE_MAP.put("WA", "Washington");
+		STATE_MAP.put("WV", "West Virginia");
+		STATE_MAP.put("WI", "Wisconsin");
+		STATE_MAP.put("WY", "Wyoming");
+		STATE_MAP.put("YT", "Yukon Territory");
+	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException,
+			InterruptedException {
 		try {
 			FormAutomation dialog = new FormAutomation();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -48,10 +123,11 @@ public class FormAutomation extends JDialog {
 		}
 		System.out.println(formFlag);
 		System.out.println(recordNumber);
-		automation();
+		automation(recordNumber);
 	}
 
-	private static void automation() throws IOException {
+	private static void automation(int recordNumber) throws IOException,
+			InterruptedException {
 		// Read in the Excel file
 		InputStream ExcelFileToRead = new FileInputStream(
 				"US_Names_Addresses.xlsx");
@@ -79,18 +155,23 @@ public class FormAutomation extends JDialog {
 
 		// Skip the column headings and already executed rows
 		row = (XSSFRow) rowIterator.next();
-		for (int i = 0; i < 1; i++) {
-			row = (XSSFRow) rowIterator.next();
-		}
+		row = (XSSFRow) rowIterator.next();
 
 		// Initialize the cell variable
 		Iterator<Cell> cells = row.cellIterator();
 
-		// Check if record already used
 		cell = (XSSFCell) cells.next();
-		for (int i = 1; i < 2; i++) {
-			while (cell.getStringCellValue().equals("True")) {
-				row = (XSSFRow) rowIterator.next();
+		for (int i = 0; i < recordNumber; i++) {
+
+			// Check if record already used
+			while (rowIterator.hasNext()) {
+				if (cell.getStringCellValue().equals("True")) {
+					row = (XSSFRow) rowIterator.next();
+					cells = row.cellIterator();
+					cell = (XSSFCell) cells.next();
+				} else {
+					break;
+				}
 			}
 
 			// Mark done
@@ -100,9 +181,11 @@ public class FormAutomation extends JDialog {
 			driver.findElement(
 					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
 					.click();
+			Random rand = new Random();
+			int random = rand.nextInt(8) + 2;
 			driver.findElement(
-					By.xpath(".//*[@id='edit_program_code_chosen']/div/ul/li[5]"))
-					.click();
+					By.xpath(".//*[@id='edit_program_code_chosen']/div/ul/li["
+							+ random + "]")).click();
 
 			// My Start Date
 			driver.findElement(
@@ -123,7 +206,6 @@ public class FormAutomation extends JDialog {
 			driver.findElement(By.id("edit-last-name")).sendKeys(lname);
 
 			// Email
-			cell = (XSSFCell) cells.next();
 			driver.findElement(By.id("edit-email")).sendKeys(
 					fname + "." + lname + "@email.com");
 
@@ -132,105 +214,87 @@ public class FormAutomation extends JDialog {
 			driver.findElement(By.id("edit-phone")).sendKeys(
 					cell.getStringCellValue());
 
+			// Country
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/a/span")).click();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/div/div/input"))
+					.sendKeys(cell.getStringCellValue() + "\n");
+
+			// Postal code
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-zipcode")).sendKeys(
+					cell.getStringCellValue());
+
+			// Date of Birth
+			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
+
+			// Military Status
+			driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[3]/label/span/i"))
+					.click();
+
+			// Address
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='edit-address']")).sendKeys(
+					cell.getStringCellValue());
+
+			// City
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-city")).sendKeys(
+					cell.getStringCellValue());
+
+			// State
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='rfi_state_chosen']/a"))
+					.click();
+			String state = STATE_MAP.get(cell.getStringCellValue());
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_state_chosen']/div/div/input"))
+					.sendKeys(state + "\n");
+
+			// Comment
+			driver.findElement(By.id("edit-questions")).sendKeys(
+					"May the force be with you!?.");
+
+			// request info
+			driver.findElement(By.id("edit-submit")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='asu_footer']/ul/li[6]/a"))));
+			if (driver
+					.getPageSource()
+					.contains(
+							"Thank you for your interest in ASU. An ASU representative will contact you soon!")) {
+				cell = (XSSFCell) cells.next();
+				cell.setCellValue("True");
+			}
+
 			FileOutputStream fileOut = new FileOutputStream(
 					"US_Names_Addresses.xlsx");
 			workBook.write(fileOut);
 			fileOut.close();
 
-			// // Zip
-			// cell = (XSSFCell) cells.next();
-			// double zipd = cell.getNumericCellValue();
-			// int zipn = (int) zipd;
-			// String zip = Integer.toString(zipn);
-			// driver.findElement(By.id("edit-zipcode")).sendKeys(zip);
+			// Open Page, Log in, Start the form
+			driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
 
-			// // Street
-			// cell = (XSSFCell) cells.next();
-			// driver.findElement(By.id("edit-asu-rfi-dedupe-street-und-0-value"))
-			// .sendKeys(cell.getStringCellValue());
-			//
-			// // City
-			// cell = (XSSFCell) cells.next();
-			// driver.findElement(By.id("edit-asu-rfi-dedupe-city-und-0-value"))
-			// .sendKeys(cell.getStringCellValue());
-			//
-			// // State
-			// cell = (XSSFCell) cells.next();
-			// driver.findElement(By.id("edit-asu-rfi-dedupe-state-und-0-value"))
-			// .sendKeys(cell.getStringCellValue());
-			//
+			// Wait for the page to load up!
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.id("edit-questions")));
 
-			//
-
-			//
-			// // Birth Date
-			// driver.findElement(
-			// By.id("edit-asu-rfi-dedupe-birth-date-und-0-value-datepicker-popup-0"))
-			// .clear();
-			// driver.findElement(
-			// By.id("edit-asu-rfi-dedupe-birth-date-und-0-value-datepicker-popup-0"))
-			// .sendKeys("01/01/2014");
-			//
-			// // Country
-			// driver.findElement(By.id("edit-asu-rfi-dedupe-country-und-0-value"))
-			// .sendKeys("United States");
-			//
-			// // This student is an international student checkbox
-			//
-			// // Veteran Status
-			//
-			// // SMS
-			//
-			// // This submission matches multiple items checkbox
-			//
-			// // Status drop down
-			//
-			// // Comments
-			// //
-			// driver.findElement(By.id("edit-asu-rfi-dedupe-comments-und-0-value"))
-			// // .sendKeys("May the force be with you!");
-			//
-			// // Requesting Site dropdown
-			// new Select(driver.findElement(By
-			// .id("edit-asu-rfi-dedupe-client-reference-und")))
-			// .selectByVisibleText("TEST");
-			//
-			// // Prod or test dropdown
-			// new Select(driver.findElement(By
-			// .id("edit-asu-rfi-dedupe-prod-test-flag-und")))
-			// .selectByVisibleText("Prod");
-			//
-			// // Nid
-			// cell = (XSSFCell) cells.next();
-			// double nidd = cell.getNumericCellValue();
-			// int nidn = (int) nidd;
-			// String nid = Integer.toString(nidn);
-			// driver.findElement(
-			// By.id("edit-asu-rfi-dedupe-remote-nid-und-0-value"))
-			// .sendKeys(nid);
-			//
-			// // Hash
-			// cell = (XSSFCell) cells.next();
-			// driver.findElement(
-			// By.id("edit-asu-rfi-dedupe-request-hash-und-0-value"))
-			// .sendKeys(cell.getStringCellValue());
-			//
-			// // Publish button
-			// driver.findElement(By.id("edit-title")).clear();
-			// driver.findElement(By.id("edit-title")).sendKeys("test" + i);
-			// driver.findElement(By.id("edit-submit")).click();
-			//
-			// // Wait
-			// WebDriverWait wait = new WebDriverWait(driver, 300);
-			// wait.until(ExpectedConditions.visibilityOfElementLocated(By
-			// .id("edit-subject")));
 		}
 
 	}
 
+	public static int randBetween(int start, int end) {
+		return start + (int) Math.round(Math.random() * (end - start));
+	}
+
 	public FormAutomation() {
 		setModal(true);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 606, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -245,14 +309,16 @@ public class FormAutomation extends JDialog {
 		panel.add(label);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(189, 40, 217, 33);
+		panel_1.setBounds(164, 40, 402, 33);
 		contentPanel.add(panel_1);
 
-		String[] items = { "form1", "form2" };
+		String[] items = {
+				"Grad Contact Transfer No Opportunity Veteran With Comment USA",
+				"form2" };
 		// Windows builder does not support JRE 7 yet -> hence the warning
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		final JComboBox comboBox = new JComboBox(items);
-		comboBox.setPreferredSize(new Dimension(200, 25));
+		comboBox.setPreferredSize(new Dimension(350, 25));
 		panel_1.add(comboBox);
 
 		JPanel panel_2 = new JPanel();
