@@ -41,6 +41,7 @@ public class FormAutomation extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
 	public static final Map<String, String> STATE_MAP;
+	// list of state codes
 	static {
 		STATE_MAP = new HashMap<String, String>();
 		STATE_MAP.put("AL", "Alabama");
@@ -121,12 +122,23 @@ public class FormAutomation extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(formFlag);
-		System.out.println(recordNumber);
-		automation(recordNumber);
+
+		switch (formFlag) {
+		case 0:
+			automation0(recordNumber);
+			break;
+		case 1:
+			automation1(recordNumber);
+			break;
+		case 2:
+			automation2(recordNumber);
+			break;
+		default:
+			System.out.println("Error handling here!");
+		}
 	}
 
-	private static void automation(int recordNumber) throws IOException,
+	private static void automation0(int recordNumber) throws IOException,
 			InterruptedException {
 		// Read in the Excel file
 		InputStream ExcelFileToRead = new FileInputStream(
@@ -146,7 +158,346 @@ public class FormAutomation extends JDialog {
 		Iterator<Row> rowIterator = sheet.rowIterator();
 
 		// Open Page, Log in, Start the form
-		driver.get("***sanitized***");
+		driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
+
+		// Wait for the page to load up!
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By
+				.id("edit-questions")));
+
+		// Skip the column headings and already executed rows
+		row = (XSSFRow) rowIterator.next();
+		row = (XSSFRow) rowIterator.next();
+
+		// Initialize the cell variable
+		Iterator<Cell> cells = row.cellIterator();
+
+		cell = (XSSFCell) cells.next();
+		for (int i = 0; i < recordNumber; i++) {
+
+			// Check if record already used
+			while (rowIterator.hasNext()) {
+				if (cell.getStringCellValue().equals("True")) {
+					row = (XSSFRow) rowIterator.next();
+					cells = row.cellIterator();
+					cell = (XSSFCell) cells.next();
+				} else {
+					break;
+				}
+			}
+
+			// Mark done
+			cell.setCellValue("True");
+
+			// My Program Interest
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.click();
+			Random rand = new Random();
+			int random = rand.nextInt(8) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String programInterest = driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(programInterest);
+
+			// My Start Date
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.click();
+			random = rand.nextInt(4) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String startDate = driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(startDate);
+
+			// First Name
+			cell = (XSSFCell) cells.next();
+			String fname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-first-name")).sendKeys(fname);
+
+			// Last name
+			cell = (XSSFCell) cells.next();
+			String lname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-last-name")).sendKeys(lname);
+
+			// Email
+			driver.findElement(By.id("edit-email")).sendKeys(
+					fname + "." + lname + "@email.com");
+
+			// Phone
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-phone")).sendKeys(
+					cell.getStringCellValue());
+
+			// Country
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/a/span")).click();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/div/div/input"))
+					.sendKeys(cell.getStringCellValue() + "\n");
+
+			// Postal code
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-zipcode")).sendKeys(
+					cell.getStringCellValue());
+
+			// Date of Birth
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
+
+			// Military Status
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[3]/label/span/i"))
+					.click();
+			cell.setCellValue(driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[3]/label/span/i"))
+					.getText());
+
+			// Address
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='edit-address']")).sendKeys(
+					cell.getStringCellValue());
+
+			// City
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-city")).sendKeys(
+					cell.getStringCellValue());
+
+			// State
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='rfi_state_chosen']/a"))
+					.click();
+			String state = STATE_MAP.get(cell.getStringCellValue());
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_state_chosen']/div/div/input"))
+					.sendKeys(state + "\n");
+
+			// Comment
+			driver.findElement(By.id("edit-questions")).sendKeys(
+					"May the force be with you!?.");
+
+			// request info
+			driver.findElement(By.id("edit-submit")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='asu_footer']/ul/li[6]/a"))));
+			if (driver
+					.getPageSource()
+					.contains(
+							"Thank you for your interest in ASU. An ASU representative will contact you soon!")) {
+				cell = (XSSFCell) cells.next();
+				cell.setCellValue("True");
+			}
+
+			FileOutputStream fileOut = new FileOutputStream(
+					"US_Names_Addresses.xlsx");
+			workBook.write(fileOut);
+			fileOut.close();
+
+			// Open Page, Log in, Start the form
+			driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
+
+			// Wait for the page to load up!
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.id("edit-questions")));
+
+		}
+
+		driver.close();
+
+	}
+
+	private static void automation1(int recordNumber) throws IOException,
+			InterruptedException {
+		// Read in the Excel file
+		InputStream ExcelFileToRead = new FileInputStream(
+				"International_Names_Addresses.xlsx");
+
+		// Make a .xlsx workbook from .xlsx file
+		XSSFWorkbook workBook = new XSSFWorkbook(ExcelFileToRead);
+
+		// Get the sheet from the .xlsx workbook
+		XSSFSheet sheet = workBook.getSheetAt(0);
+
+		// Declare variables for manipulation of .xlsx workbook
+		XSSFRow row;
+		XSSFCell cell;
+
+		// Define Iterators for the different sheets
+		Iterator<Row> rowIterator = sheet.rowIterator();
+
+		// Open Page, Log in, Start the form
+		driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
+
+		// Wait for the page to load up!
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By
+				.id("edit-questions")));
+
+		// Skip the column headings and already executed rows
+		row = (XSSFRow) rowIterator.next();
+		row = (XSSFRow) rowIterator.next();
+
+		// Initialize the cell variable
+		Iterator<Cell> cells = row.cellIterator();
+
+		cell = (XSSFCell) cells.next();
+		for (int i = 0; i < recordNumber; i++) {
+
+			// Check if record already used
+			while (rowIterator.hasNext()) {
+				if (cell.getStringCellValue().equals("True")) {
+					row = (XSSFRow) rowIterator.next();
+					cells = row.cellIterator();
+					cell = (XSSFCell) cells.next();
+				} else {
+					break;
+				}
+			}
+
+			// Mark done
+			cell.setCellValue("True");
+
+			// My Program Interest
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.click();
+			Random rand = new Random();
+			int random = rand.nextInt(8) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/div/ul/li["
+							+ random + "]")).click();
+
+			// My Start Date
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.click();
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li[3]"))
+					.click();
+
+			// First Name
+			cell = (XSSFCell) cells.next();
+			String fname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-first-name")).sendKeys(fname);
+
+			// Last name
+			cell = (XSSFCell) cells.next();
+			String lname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-last-name")).sendKeys(lname);
+
+			// Email
+			driver.findElement(By.id("edit-email")).sendKeys(
+					fname + "." + lname + "@email.com");
+
+			// Phone
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-phone")).sendKeys(
+					cell.getStringCellValue());
+
+			// Country
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/a/span")).click();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/div/div/input"))
+					.sendKeys(cell.getStringCellValue() + "\n");
+
+			// Postal code
+			cell = (XSSFCell) cells.next();
+			if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+				driver.findElement(By.id("edit-zipcode")).sendKeys(
+						cell.getStringCellValue());
+			} else {
+				String zip = String.valueOf((int) cell.getNumericCellValue());
+				driver.findElement(By.id("edit-zipcode")).sendKeys(zip);
+			}
+
+			// Date of Birth
+			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
+
+			// Military Status
+			driver.findElement(
+					By.xpath(".//*[@id='req_info_form']/div[10]/label/span/i"))
+					.click();
+
+			// Address
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='edit-address']")).sendKeys(
+					cell.getStringCellValue());
+
+			// City
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-city")).sendKeys(
+					cell.getStringCellValue());
+
+			// Comment
+			driver.findElement(By.id("edit-questions")).sendKeys(
+					"May the force be with you!?.");
+
+			// request info
+			driver.findElement(By.id("edit-submit")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='asu_footer']/ul/li[6]/a"))));
+			if (driver
+					.getPageSource()
+					.contains(
+							"Thank you for your interest in ASU. An ASU representative will contact you soon!")) {
+				cell = (XSSFCell) cells.next();
+				cell.setCellValue("True");
+			}
+
+			FileOutputStream fileOut = new FileOutputStream(
+					"International_Names_Addresses.xlsx");
+			workBook.write(fileOut);
+			fileOut.close();
+
+			// Open Page, Log in, Start the form
+			driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
+
+			// Wait for the page to load up!
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.id("edit-questions")));
+		}
+
+		driver.close();
+
+	}
+
+	private static void automation2(int recordNumber) throws IOException,
+			InterruptedException {
+		// Read in the Excel file
+		InputStream ExcelFileToRead = new FileInputStream(
+				"US_Names_Addresses.xlsx");
+
+		// Make a .xlsx workbook from .xlsx file
+		XSSFWorkbook workBook = new XSSFWorkbook(ExcelFileToRead);
+
+		// Get the sheet from the .xlsx workbook
+		XSSFSheet sheet = workBook.getSheetAt(0);
+
+		// Declare variables for manipulation of .xlsx workbook
+		XSSFRow row;
+		XSSFCell cell;
+
+		// Define Iterators for the different sheets
+		Iterator<Row> rowIterator = sheet.rowIterator();
+
+		// Open Page, Log in, Start the form
+		driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
 
 		// Wait for the page to load up!
 		WebDriverWait wait = new WebDriverWait(driver, 300);
@@ -278,7 +629,7 @@ public class FormAutomation extends JDialog {
 			fileOut.close();
 
 			// Open Page, Log in, Start the form
-			driver.get("***sanitized***");
+			driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
 
 			// Wait for the page to load up!
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By
@@ -286,22 +637,20 @@ public class FormAutomation extends JDialog {
 
 		}
 
-	}
+		driver.close();
 
-	public static int randBetween(int start, int end) {
-		return start + (int) Math.round(Math.random() * (end - start));
 	}
 
 	public FormAutomation() {
 		setModal(true);
-		setBounds(100, 100, 606, 300);
+		setBounds(100, 100, 752, 283);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 40, 122, 33);
+		panel.setBounds(10, 40, 98, 33);
 		contentPanel.add(panel);
 
 		JLabel label = new JLabel("Select Form: ");
@@ -309,16 +658,18 @@ public class FormAutomation extends JDialog {
 		panel.add(label);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(164, 40, 402, 33);
+		panel_1.setBounds(173, 40, 573, 33);
 		contentPanel.add(panel_1);
 
 		String[] items = {
 				"Grad Contact Transfer No Opportunity Veteran With Comment USA",
-				"form2" };
+				"Grad Contact First Time Grad No Opportunity comment added International",
+				"Grad Contact First Time Grad No Opportunity USA" };
+
 		// Windows builder does not support JRE 7 yet -> hence the warning
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		final JComboBox comboBox = new JComboBox(items);
-		comboBox.setPreferredSize(new Dimension(350, 25));
+		comboBox.setPreferredSize(new Dimension(525, 25));
 		panel_1.add(comboBox);
 
 		JPanel panel_2 = new JPanel();
@@ -330,7 +681,7 @@ public class FormAutomation extends JDialog {
 		panel_2.add(label_1);
 
 		JPanel panel_3 = new JPanel();
-		panel_3.setBounds(235, 113, 122, 33);
+		panel_3.setBounds(173, 113, 185, 33);
 		contentPanel.add(panel_3);
 
 		textField = new JTextField();
@@ -338,10 +689,10 @@ public class FormAutomation extends JDialog {
 		panel_3.add(textField);
 
 		JPanel panel_4 = new JPanel();
-		panel_4.setBounds(98, 191, 226, 37);
+		panel_4.setBounds(306, 183, 226, 37);
 		contentPanel.add(panel_4);
 
-		JButton button = new JButton("Let the automation begin!");
+		JButton button = new JButton("Fire up the automation!");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				formFlag = comboBox.getSelectedIndex();
