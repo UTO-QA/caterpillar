@@ -133,6 +133,24 @@ public class FormAutomation extends JDialog {
 		case 2:
 			automation2(recordNumber);
 			break;
+		case 3:
+			automation3(recordNumber);
+			break;
+		case 4:
+			automation4(recordNumber);
+			break;
+		case 5:
+			automation5(recordNumber);
+			break;
+		case 6:
+			automation6(recordNumber);
+			break;
+		case 7:
+			automation7(recordNumber);
+			break;
+		case 8:
+			automation8(recordNumber);
+			break;
 		default:
 			System.out.println("Error handling here!");
 		}
@@ -231,6 +249,8 @@ public class FormAutomation extends JDialog {
 			// Email
 			driver.findElement(By.id("edit-email")).sendKeys(
 					fname + "." + lname + "@email.com");
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(fname + "." + lname + "@email.com");
 
 			// Phone
 			cell = (XSSFCell) cells.next();
@@ -312,6 +332,9 @@ public class FormAutomation extends JDialog {
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By
 					.id("edit-questions")));
 
+			// Sleep for bot
+			Thread.sleep(20000);
+
 		}
 
 		driver.close();
@@ -378,6 +401,11 @@ public class FormAutomation extends JDialog {
 			driver.findElement(
 					By.xpath(".//*[@id='edit_program_code_chosen']/div/ul/li["
 							+ random + "]")).click();
+			String programInterest = driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(programInterest);
 
 			// My Start Date
 			driver.findElement(
@@ -386,6 +414,11 @@ public class FormAutomation extends JDialog {
 			driver.findElement(
 					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li[3]"))
 					.click();
+			String startDate = driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(startDate);
 
 			// First Name
 			cell = (XSSFCell) cells.next();
@@ -400,6 +433,8 @@ public class FormAutomation extends JDialog {
 			// Email
 			driver.findElement(By.id("edit-email")).sendKeys(
 					fname + "." + lname + "@email.com");
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(fname + "." + lname + "@email.com");
 
 			// Phone
 			cell = (XSSFCell) cells.next();
@@ -425,12 +460,21 @@ public class FormAutomation extends JDialog {
 			}
 
 			// Date of Birth
+			cell = (XSSFCell) cells.next();
 			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
 
-			// Military Status
+			// International Flag
 			driver.findElement(
 					By.xpath(".//*[@id='req_info_form']/div[10]/label/span/i"))
 					.click();
+
+			// Military Status
+			driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[1]/label/span/i"))
+					.click();
+			cell.setCellValue(driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[1]/label/span/i"))
+					.getText());
 
 			// Address
 			cell = (XSSFCell) cells.next();
@@ -471,6 +515,9 @@ public class FormAutomation extends JDialog {
 			// Wait for the page to load up!
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By
 					.id("edit-questions")));
+
+			// Sleep for bot
+			Thread.sleep(20000);
 		}
 
 		driver.close();
@@ -537,14 +584,25 @@ public class FormAutomation extends JDialog {
 			driver.findElement(
 					By.xpath(".//*[@id='edit_program_code_chosen']/div/ul/li["
 							+ random + "]")).click();
+			String programInterest = driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(programInterest);
 
 			// My Start Date
 			driver.findElement(
 					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
 					.click();
+			random = rand.nextInt(4) + 2;
 			driver.findElement(
-					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li[3]"))
-					.click();
+					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String startDate = driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(startDate);
 
 			// First Name
 			cell = (XSSFCell) cells.next();
@@ -559,6 +617,8 @@ public class FormAutomation extends JDialog {
 			// Email
 			driver.findElement(By.id("edit-email")).sendKeys(
 					fname + "." + lname + "@email.com");
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(fname + "." + lname + "@email.com");
 
 			// Phone
 			cell = (XSSFCell) cells.next();
@@ -579,12 +639,203 @@ public class FormAutomation extends JDialog {
 					cell.getStringCellValue());
 
 			// Date of Birth
+			cell = (XSSFCell) cells.next();
 			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
 
 			// Military Status
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[1]/label/span/i"))
+					.click();
+			cell.setCellValue(driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[1]/label/span/i"))
+					.getText());
+
+			// Address
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='edit-address']")).sendKeys(
+					cell.getStringCellValue());
+
+			// City
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-city")).sendKeys(
+					cell.getStringCellValue());
+
+			// State
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='rfi_state_chosen']/a"))
+					.click();
+			String state = STATE_MAP.get(cell.getStringCellValue());
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_state_chosen']/div/div/input"))
+					.sendKeys(state + "\n");
+
+			// request info
+			driver.findElement(By.id("edit-submit")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='asu_footer']/ul/li[6]/a"))));
+			if (driver
+					.getPageSource()
+					.contains(
+							"Thank you for your interest in ASU. An ASU representative will contact you soon!")) {
+				cell = (XSSFCell) cells.next();
+				cell.setCellValue("True");
+			}
+
+			FileOutputStream fileOut = new FileOutputStream(
+					"US_Names_Addresses.xlsx");
+			workBook.write(fileOut);
+			fileOut.close();
+
+			// Open Page, Log in, Start the form
+			driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
+
+			// Wait for the page to load up!
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.id("edit-questions")));
+
+			// Sleep for bot
+			Thread.sleep(20000);
+		}
+
+		driver.close();
+
+	}
+
+	private static void automation3(int recordNumber) throws IOException,
+			InterruptedException {
+		// Read in the Excel file
+		InputStream ExcelFileToRead = new FileInputStream(
+				"US_Names_Addresses.xlsx");
+
+		// Make a .xlsx workbook from .xlsx file
+		XSSFWorkbook workBook = new XSSFWorkbook(ExcelFileToRead);
+
+		// Get the sheet from the .xlsx workbook
+		XSSFSheet sheet = workBook.getSheetAt(0);
+
+		// Declare variables for manipulation of .xlsx workbook
+		XSSFRow row;
+		XSSFCell cell;
+
+		// Define Iterators for the different sheets
+		Iterator<Row> rowIterator = sheet.rowIterator();
+
+		// Open Page, Log in, Start the form
+		driver.get("https://aarontest-qa.asu.edu/content/undergraduate-contact-form");
+
+		// Wait for the page to load up!
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By
+				.id("edit-questions")));
+
+		// Skip the column headings and already executed rows
+		row = (XSSFRow) rowIterator.next();
+		row = (XSSFRow) rowIterator.next();
+
+		// Initialize the cell variable
+		Iterator<Cell> cells = row.cellIterator();
+
+		cell = (XSSFCell) cells.next();
+		for (int i = 0; i < recordNumber; i++) {
+
+			// Check if record already used
+			while (rowIterator.hasNext()) {
+				if (cell.getStringCellValue().equals("True")) {
+					row = (XSSFRow) rowIterator.next();
+					cells = row.cellIterator();
+					cell = (XSSFCell) cells.next();
+				} else {
+					break;
+				}
+			}
+
+			// Mark done
+			cell.setCellValue("True");
+
+			// I will be a future
+			driver.findElement(
+					By.xpath(".//*[@id='edit_student_type_chosen']/a/span"))
+					.click();
+			driver.findElement(
+					By.xpath(".//*[@id='edit_student_type_chosen']/div/ul/li[2]"))
+					.click();
+
+			// My Program Interest
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.click();
+			Random rand = new Random();
+			int random = rand.nextInt(32) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String programInterest = driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(programInterest);
+
+			// My Start Date
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.click();
+			random = rand.nextInt(4) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String startDate = driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(startDate);
+
+			// First Name
+			cell = (XSSFCell) cells.next();
+			String fname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-first-name")).sendKeys(fname);
+
+			// Last name
+			cell = (XSSFCell) cells.next();
+			String lname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-last-name")).sendKeys(lname);
+
+			// Email
+			driver.findElement(By.id("edit-email")).sendKeys(
+					fname + "." + lname + "@email.com");
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(fname + "." + lname + "@email.com");
+
+			// Phone
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-phone")).sendKeys(
+					cell.getStringCellValue());
+
+			// Country
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/a/span")).click();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/div/div/input"))
+					.sendKeys(cell.getStringCellValue() + "\n");
+
+			// Postal code
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-zipcode")).sendKeys(
+					cell.getStringCellValue());
+
+			// Date of Birth
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
+
+			// Military Status
+			cell = (XSSFCell) cells.next();
 			driver.findElement(
 					By.xpath(".//*[@id='edit-military']/div[3]/label/span/i"))
 					.click();
+			cell.setCellValue("National Guard");
 
 			// Address
 			cell = (XSSFCell) cells.next();
@@ -629,12 +880,950 @@ public class FormAutomation extends JDialog {
 			fileOut.close();
 
 			// Open Page, Log in, Start the form
-			driver.get("https://aarontest-qa.asu.edu/content/graduate-long-form");
+			driver.get("https://aarontest-qa.asu.edu/content/undergraduate-contact-form");
 
 			// Wait for the page to load up!
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By
 					.id("edit-questions")));
 
+			// Sleep for bot
+			Thread.sleep(20000);
+		}
+
+		driver.close();
+
+	}
+
+	private static void automation4(int recordNumber) throws IOException,
+			InterruptedException {
+		// Read in the Excel file
+		InputStream ExcelFileToRead = new FileInputStream(
+				"International_Names_Addresses.xlsx");
+
+		// Make a .xlsx workbook from .xlsx file
+		XSSFWorkbook workBook = new XSSFWorkbook(ExcelFileToRead);
+
+		// Get the sheet from the .xlsx workbook
+		XSSFSheet sheet = workBook.getSheetAt(0);
+
+		// Declare variables for manipulation of .xlsx workbook
+		XSSFRow row;
+		XSSFCell cell;
+
+		// Define Iterators for the different sheets
+		Iterator<Row> rowIterator = sheet.rowIterator();
+
+		// Open Page, Log in, Start the form
+		driver.get("https://aarontest-qa.asu.edu/content/undergraduate-contact-form");
+
+		// Wait for the page to load up!
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By
+				.id("edit-questions")));
+
+		// Skip the column headings and already executed rows
+		row = (XSSFRow) rowIterator.next();
+		row = (XSSFRow) rowIterator.next();
+
+		// Initialize the cell variable
+		Iterator<Cell> cells = row.cellIterator();
+
+		cell = (XSSFCell) cells.next();
+		for (int i = 0; i < recordNumber; i++) {
+
+			// Check if record already used
+			while (rowIterator.hasNext()) {
+				if (cell.getStringCellValue().equals("True")) {
+					row = (XSSFRow) rowIterator.next();
+					cells = row.cellIterator();
+					cell = (XSSFCell) cells.next();
+				} else {
+					break;
+				}
+			}
+
+			// Mark done
+			cell.setCellValue("True");
+
+			// I will be a future
+			driver.findElement(
+					By.xpath(".//*[@id='edit_student_type_chosen']/a/span"))
+					.click();
+			driver.findElement(
+					By.xpath(".//*[@id='edit_student_type_chosen']/div/ul/li[2]"))
+					.click();
+
+			// My Program Interest
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.click();
+			Random rand = new Random();
+			int random = rand.nextInt(32) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String programInterest = driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(programInterest);
+
+			// My Start Date
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.click();
+			random = rand.nextInt(4) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String startDate = driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(startDate);
+
+			// First Name
+			cell = (XSSFCell) cells.next();
+			String fname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-first-name")).sendKeys(fname);
+
+			// Last name
+			cell = (XSSFCell) cells.next();
+			String lname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-last-name")).sendKeys(lname);
+
+			// Email
+			driver.findElement(By.id("edit-email")).sendKeys(
+					fname + "." + lname + "@email.com");
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(fname + "." + lname + "@email.com");
+
+			// Phone
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-phone")).sendKeys(
+					cell.getStringCellValue());
+
+			// Country
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/a/span")).click();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/div/div/input"))
+					.sendKeys(cell.getStringCellValue() + "\n");
+
+			// Postal code
+			cell = (XSSFCell) cells.next();
+			if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+				driver.findElement(By.id("edit-zipcode")).sendKeys(
+						cell.getStringCellValue());
+			} else {
+				String zip = String.valueOf((int) cell.getNumericCellValue());
+				driver.findElement(By.id("edit-zipcode")).sendKeys(zip);
+			}
+
+			// Date of Birth
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
+
+			// International flag
+			driver.findElement(
+					By.xpath(".//*[@id='req_info_form']/div[10]/label/span/i"))
+					.click();
+
+			// Military Status
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[1]/label/span/i"))
+					.click();
+			cell.setCellValue("None");
+
+			// Address
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='edit-address']")).sendKeys(
+					cell.getStringCellValue());
+
+			// City
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-city")).sendKeys(
+					cell.getStringCellValue());
+
+			// Comment
+			driver.findElement(By.id("edit-questions")).sendKeys(
+					"May the force be with you!?.");
+
+			// request info
+			driver.findElement(By.id("edit-submit")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='asu_footer']/ul/li[6]/a"))));
+			if (driver
+					.getPageSource()
+					.contains(
+							"Thank you for your interest in ASU. An ASU representative will contact you soon!")) {
+				cell = (XSSFCell) cells.next();
+				cell.setCellValue("True");
+			}
+
+			FileOutputStream fileOut = new FileOutputStream(
+					"International_Names_Addresses.xlsx");
+			workBook.write(fileOut);
+			fileOut.close();
+
+			// Open Page, Log in, Start the form
+			driver.get("https://aarontest-qa.asu.edu/content/undergraduate-contact-form");
+
+			// Wait for the page to load up!
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.id("edit-questions")));
+
+			// Sleep for bot
+			Thread.sleep(20000);
+		}
+
+		driver.close();
+
+	}
+
+	private static void automation5(int recordNumber) throws IOException,
+			InterruptedException {
+		// Read in the Excel file
+		InputStream ExcelFileToRead = new FileInputStream(
+				"US_Names_Addresses.xlsx");
+
+		// Make a .xlsx workbook from .xlsx file
+		XSSFWorkbook workBook = new XSSFWorkbook(ExcelFileToRead);
+
+		// Get the sheet from the .xlsx workbook
+		XSSFSheet sheet = workBook.getSheetAt(0);
+
+		// Declare variables for manipulation of .xlsx workbook
+		XSSFRow row;
+		XSSFCell cell;
+
+		// Define Iterators for the different sheets
+		Iterator<Row> rowIterator = sheet.rowIterator();
+
+		// Open Page, Log in, Start the form
+		driver.get("https://aarontest-qa.asu.edu/content/undergraduate-contact-form");
+
+		// Wait for the page to load up!
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By
+				.id("edit-questions")));
+
+		// Skip the column headings and already executed rows
+		row = (XSSFRow) rowIterator.next();
+		row = (XSSFRow) rowIterator.next();
+
+		// Initialize the cell variable
+		Iterator<Cell> cells = row.cellIterator();
+
+		cell = (XSSFCell) cells.next();
+		for (int i = 0; i < recordNumber; i++) {
+
+			// Check if record already used
+			while (rowIterator.hasNext()) {
+				if (cell.getStringCellValue().equals("True")) {
+					row = (XSSFRow) rowIterator.next();
+					cells = row.cellIterator();
+					cell = (XSSFCell) cells.next();
+				} else {
+					break;
+				}
+			}
+
+			// Mark done
+			cell.setCellValue("True");
+
+			// I will be a future
+			driver.findElement(
+					By.xpath(".//*[@id='edit_student_type_chosen']/a/span"))
+					.click();
+			driver.findElement(
+					By.xpath(".//*[@id='edit_student_type_chosen']/div/ul/li[2]"))
+					.click();
+
+			// My Program Interest
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.click();
+			Random rand = new Random();
+			int random = rand.nextInt(32) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String programInterest = driver.findElement(
+					By.xpath(".//*[@id='edit_program_code_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(programInterest);
+
+			// My Start Date
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.click();
+			random = rand.nextInt(4) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String startDate = driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(startDate);
+
+			// First Name
+			cell = (XSSFCell) cells.next();
+			String fname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-first-name")).sendKeys(fname);
+
+			// Last name
+			cell = (XSSFCell) cells.next();
+			String lname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-last-name")).sendKeys(lname);
+
+			// Email
+			driver.findElement(By.id("edit-email")).sendKeys(
+					fname + "." + lname + "@email.com");
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(fname + "." + lname + "@email.com");
+
+			// Phone
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-phone")).sendKeys(
+					cell.getStringCellValue());
+
+			// Country
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/a/span")).click();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/div/div/input"))
+					.sendKeys(cell.getStringCellValue() + "\n");
+
+			// Postal code
+			cell = (XSSFCell) cells.next();
+			if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+				driver.findElement(By.id("edit-zipcode")).sendKeys(
+						cell.getStringCellValue());
+			} else {
+				String zip = String.valueOf((int) cell.getNumericCellValue());
+				driver.findElement(By.id("edit-zipcode")).sendKeys(zip);
+			}
+
+			// Date of Birth
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
+
+			// Military Status
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[1]/label/span/i"))
+					.click();
+			cell.setCellValue("None");
+
+			// Address
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='edit-address']")).sendKeys(
+					cell.getStringCellValue());
+
+			// City
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-city")).sendKeys(
+					cell.getStringCellValue());
+
+			// State
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='rfi_state_chosen']/a"))
+					.click();
+			String state = STATE_MAP.get(cell.getStringCellValue());
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_state_chosen']/div/div/input"))
+					.sendKeys(state + "\n");
+
+			// request info
+			driver.findElement(By.id("edit-submit")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='asu_footer']/ul/li[6]/a"))));
+			if (driver
+					.getPageSource()
+					.contains(
+							"Thank you for your interest in ASU. An ASU representative will contact you soon!")) {
+				cell = (XSSFCell) cells.next();
+				cell.setCellValue("True");
+			}
+
+			FileOutputStream fileOut = new FileOutputStream(
+					"US_Names_Addresses.xlsx");
+			workBook.write(fileOut);
+			fileOut.close();
+
+			// Open Page, Log in, Start the form
+			driver.get("https://aarontest-qa.asu.edu/content/undergraduate-contact-form");
+
+			// Wait for the page to load up!
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.id("edit-questions")));
+
+			// Sleep for bot
+			Thread.sleep(20000);
+		}
+
+		driver.close();
+
+	}
+
+	private static void automation6(int recordNumber) throws IOException,
+			InterruptedException {
+		// Read in the Excel file
+		InputStream ExcelFileToRead = new FileInputStream(
+				"US_Names_Addresses.xlsx");
+
+		// Make a .xlsx workbook from .xlsx file
+		XSSFWorkbook workBook = new XSSFWorkbook(ExcelFileToRead);
+
+		// Get the sheet from the .xlsx workbook
+		XSSFSheet sheet = workBook.getSheetAt(0);
+
+		// Declare variables for manipulation of .xlsx workbook
+		XSSFRow row;
+		XSSFCell cell;
+
+		// Define Iterators for the different sheets
+		Iterator<Row> rowIterator = sheet.rowIterator();
+
+		// Open Page, Log in, Start the form
+		driver.get("https://aarontest-qa.asu.edu/content/accountancy-macc");
+
+		// Wait for the page to load up!
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By
+				.id("edit-submit")));
+
+		// Skip the column headings and already executed rows
+		row = (XSSFRow) rowIterator.next();
+		row = (XSSFRow) rowIterator.next();
+
+		// Initialize the cell variable
+		Iterator<Cell> cells = row.cellIterator();
+
+		cell = (XSSFCell) cells.next();
+		for (int i = 0; i < recordNumber; i++) {
+
+			// Check if record already used
+			while (rowIterator.hasNext()) {
+				if (cell.getStringCellValue().equals("True")) {
+					row = (XSSFRow) rowIterator.next();
+					cells = row.cellIterator();
+					cell = (XSSFCell) cells.next();
+				} else {
+					break;
+				}
+			}
+
+			// Mark done
+			cell.setCellValue("True");
+
+			// My Program Interest
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue("Accountancy (MACC)");
+
+			// My Start Date
+			Random rand = new Random();
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.click();
+			int random = rand.nextInt(4) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String startDate = driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(startDate);
+
+			// First Name
+			cell = (XSSFCell) cells.next();
+			String fname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-first-name")).sendKeys(fname);
+
+			// Last name
+			cell = (XSSFCell) cells.next();
+			String lname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-last-name")).sendKeys(lname);
+
+			// Email
+			driver.findElement(By.id("edit-email")).sendKeys(
+					fname + "." + lname + "@email.com");
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(fname + "." + lname + "@email.com");
+
+			// Phone
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-phone")).sendKeys(
+					cell.getStringCellValue());
+
+			// Country
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/a/span")).click();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/div/div/input"))
+					.sendKeys(cell.getStringCellValue() + "\n");
+
+			// Postal code
+			cell = (XSSFCell) cells.next();
+			if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+				driver.findElement(By.id("edit-zipcode")).sendKeys(
+						cell.getStringCellValue());
+			} else {
+				String zip = String.valueOf((int) cell.getNumericCellValue());
+				driver.findElement(By.id("edit-zipcode")).sendKeys(zip);
+			}
+
+			// Date of Birth
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
+
+			// Next page
+			driver.findElement(By.xpath(".//*[@id='edit-submit']")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='edit-markup']/div/strong"))));
+
+			// Military Status
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[3]/label/span/i"))
+					.click();
+			cell.setCellValue("National Guard");
+
+			// Address
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='edit-address']")).sendKeys(
+					cell.getStringCellValue());
+
+			// City
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-city")).sendKeys(
+					cell.getStringCellValue());
+
+			// State
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='rfi_state_chosen']/a"))
+					.click();
+			String state = STATE_MAP.get(cell.getStringCellValue());
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_state_chosen']/div/div/input"))
+					.sendKeys(state + "\n");
+
+			// Comment
+			driver.findElement(By.id("edit-questions")).sendKeys(
+					"May the force be with you!?.");
+
+			// request info
+			driver.findElement(By.id("edit-submit")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='asu_footer']/ul/li[6]/a"))));
+			if (driver
+					.getPageSource()
+					.contains(
+							"Thank you for your interest in ASU. An ASU representative will contact you soon!")) {
+				cell = (XSSFCell) cells.next();
+				cell.setCellValue("True");
+			}
+
+			FileOutputStream fileOut = new FileOutputStream(
+					"US_Names_Addresses.xlsx");
+			workBook.write(fileOut);
+			fileOut.close();
+
+			// Open Page, Log in, Start the form
+			driver.get("https://aarontest-qa.asu.edu/content/accountancy-macc");
+
+			// Wait for the page to load up!
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.id("edit-submit")));
+
+			// Sleep for bot
+			Thread.sleep(20000);
+		}
+
+		driver.close();
+
+	}
+
+	private static void automation7(int recordNumber) throws IOException,
+			InterruptedException {
+		// Read in the Excel file
+		InputStream ExcelFileToRead = new FileInputStream(
+				"International_Names_Addresses.xlsx");
+
+		// Make a .xlsx workbook from .xlsx file
+		XSSFWorkbook workBook = new XSSFWorkbook(ExcelFileToRead);
+
+		// Get the sheet from the .xlsx workbook
+		XSSFSheet sheet = workBook.getSheetAt(0);
+
+		// Declare variables for manipulation of .xlsx workbook
+		XSSFRow row;
+		XSSFCell cell;
+
+		// Define Iterators for the different sheets
+		Iterator<Row> rowIterator = sheet.rowIterator();
+
+		// Open Page, Log in, Start the form
+		driver.get("https://aarontest-qa.asu.edu/content/accountancy-macc");
+
+		// Wait for the page to load up!
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By
+				.id("edit-submit")));
+
+		// Skip the column headings and already executed rows
+		row = (XSSFRow) rowIterator.next();
+		row = (XSSFRow) rowIterator.next();
+
+		// Initialize the cell variable
+		Iterator<Cell> cells = row.cellIterator();
+
+		cell = (XSSFCell) cells.next();
+		for (int i = 0; i < recordNumber; i++) {
+
+			// Check if record already used
+			while (rowIterator.hasNext()) {
+				if (cell.getStringCellValue().equals("True")) {
+					row = (XSSFRow) rowIterator.next();
+					cells = row.cellIterator();
+					cell = (XSSFCell) cells.next();
+				} else {
+					break;
+				}
+			}
+
+			// Mark done
+			cell.setCellValue("True");
+
+			// My Program Interest
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue("Accountancy (MACC)");
+
+			// My Start Date
+			Random rand = new Random();
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.click();
+			int random = rand.nextInt(4) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String startDate = driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(startDate);
+
+			// First Name
+			cell = (XSSFCell) cells.next();
+			String fname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-first-name")).sendKeys(fname);
+
+			// Last name
+			cell = (XSSFCell) cells.next();
+			String lname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-last-name")).sendKeys(lname);
+
+			// Email
+			driver.findElement(By.id("edit-email")).sendKeys(
+					fname + "." + lname + "@email.com");
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(fname + "." + lname + "@email.com");
+
+			// Phone
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-phone")).sendKeys(
+					cell.getStringCellValue());
+
+			// Country
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/a/span")).click();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/div/div/input"))
+					.sendKeys(cell.getStringCellValue() + "\n");
+
+			// Postal code
+			cell = (XSSFCell) cells.next();
+			if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+				driver.findElement(By.id("edit-zipcode")).sendKeys(
+						cell.getStringCellValue());
+			} else {
+				String zip = String.valueOf((int) cell.getNumericCellValue());
+				driver.findElement(By.id("edit-zipcode")).sendKeys(zip);
+			}
+
+			// Date of Birth
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
+
+			// Next page
+			driver.findElement(By.xpath(".//*[@id='edit-submit']")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='edit-markup']/div/strong"))));
+
+			// International flag
+			driver.findElement(
+					By.xpath(".//*[@id='asu_rfi_second_form']/div/div[2]/label/span"))
+					.click();
+
+			// Military Status
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[1]/label/span/i"))
+					.click();
+			cell.setCellValue("None");
+
+			// Address
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='edit-address']")).sendKeys(
+					cell.getStringCellValue());
+
+			// City
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-city")).sendKeys(
+					cell.getStringCellValue());
+
+			// State
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='rfi_state_chosen']/a"))
+					.click();
+			String state = STATE_MAP.get(cell.getStringCellValue());
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_state_chosen']/div/div/input"))
+					.sendKeys(state + "\n");
+
+			// Comment
+			driver.findElement(By.id("edit-questions")).sendKeys(
+					"May the force be with you!?.");
+
+			// request info
+			driver.findElement(By.id("edit-submit")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='asu_footer']/ul/li[6]/a"))));
+			if (driver
+					.getPageSource()
+					.contains(
+							"Thank you for your interest in ASU. An ASU representative will contact you soon!")) {
+				cell = (XSSFCell) cells.next();
+				cell.setCellValue("True");
+			}
+
+			FileOutputStream fileOut = new FileOutputStream(
+					"International_Names_Addresses.xlsx");
+			workBook.write(fileOut);
+			fileOut.close();
+
+			// Open Page, Log in, Start the form
+			driver.get("https://aarontest-qa.asu.edu/content/accountancy-macc");
+
+			// Wait for the page to load up!
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.id("edit-submit")));
+
+			// Sleep for bot
+			Thread.sleep(20000);
+
+		}
+
+		driver.close();
+
+	}
+
+	private static void automation8(int recordNumber) throws IOException,
+			InterruptedException {
+		// Read in the Excel file
+		InputStream ExcelFileToRead = new FileInputStream(
+				"US_Names_Addresses.xlsx");
+
+		// Make a .xlsx workbook from .xlsx file
+		XSSFWorkbook workBook = new XSSFWorkbook(ExcelFileToRead);
+
+		// Get the sheet from the .xlsx workbook
+		XSSFSheet sheet = workBook.getSheetAt(0);
+
+		// Declare variables for manipulation of .xlsx workbook
+		XSSFRow row;
+		XSSFCell cell;
+
+		// Define Iterators for the different sheets
+		Iterator<Row> rowIterator = sheet.rowIterator();
+
+		// Open Page, Log in, Start the form
+		driver.get("https://aarontest-qa.asu.edu/content/accountancy-macc");
+
+		// Wait for the page to load up!
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By
+				.id("edit-submit")));
+
+		// Skip the column headings and already executed rows
+		row = (XSSFRow) rowIterator.next();
+		row = (XSSFRow) rowIterator.next();
+
+		// Initialize the cell variable
+		Iterator<Cell> cells = row.cellIterator();
+
+		cell = (XSSFCell) cells.next();
+		for (int i = 0; i < recordNumber; i++) {
+
+			// Check if record already used
+			while (rowIterator.hasNext()) {
+				if (cell.getStringCellValue().equals("True")) {
+					row = (XSSFRow) rowIterator.next();
+					cells = row.cellIterator();
+					cell = (XSSFCell) cells.next();
+				} else {
+					break;
+				}
+			}
+
+			// Mark done
+			cell.setCellValue("True");
+
+			// My Program Interest
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue("Accountancy (MACC)");
+
+			// My Start Date
+			Random rand = new Random();
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.click();
+			int random = rand.nextInt(4) + 2;
+			driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/div/ul/li["
+							+ random + "]")).click();
+			String startDate = driver.findElement(
+					By.xpath(".//*[@id='edit_start_date_chosen']/a/span"))
+					.getText();
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(startDate);
+
+			// First Name
+			cell = (XSSFCell) cells.next();
+			String fname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-first-name")).sendKeys(fname);
+
+			// Last name
+			cell = (XSSFCell) cells.next();
+			String lname = cell.getStringCellValue();
+			driver.findElement(By.id("edit-last-name")).sendKeys(lname);
+
+			// Email
+			driver.findElement(By.id("edit-email")).sendKeys(
+					fname + "." + lname + "@email.com");
+			cell = (XSSFCell) cells.next();
+			cell.setCellValue(fname + "." + lname + "@email.com");
+
+			// Phone
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-phone")).sendKeys(
+					cell.getStringCellValue());
+
+			// Country
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/a/span")).click();
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_country_chosen']/div/div/input"))
+					.sendKeys(cell.getStringCellValue() + "\n");
+
+			// Postal code
+			cell = (XSSFCell) cells.next();
+			if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+				driver.findElement(By.id("edit-zipcode")).sendKeys(
+						cell.getStringCellValue());
+			} else {
+				String zip = String.valueOf((int) cell.getNumericCellValue());
+				driver.findElement(By.id("edit-zipcode")).sendKeys(zip);
+			}
+
+			// Date of Birth
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-birthdate")).sendKeys("08/25/1991");
+
+			// Next page
+			driver.findElement(By.xpath(".//*[@id='edit-submit']")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='edit-markup']/div/strong"))));
+
+			// Military Status
+			cell = (XSSFCell) cells.next();
+			driver.findElement(
+					By.xpath(".//*[@id='edit-military']/div[1]/label/span/i"))
+					.click();
+			cell.setCellValue("None");
+
+			// Address
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='edit-address']")).sendKeys(
+					cell.getStringCellValue());
+
+			// City
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.id("edit-city")).sendKeys(
+					cell.getStringCellValue());
+
+			// State
+			cell = (XSSFCell) cells.next();
+			driver.findElement(By.xpath(".//*[@id='rfi_state_chosen']/a"))
+					.click();
+			String state = STATE_MAP.get(cell.getStringCellValue());
+			driver.findElement(
+					By.xpath(".//*[@id='rfi_state_chosen']/div/div/input"))
+					.sendKeys(state + "\n");
+
+			// request info
+			driver.findElement(By.id("edit-submit")).click();
+
+			// confirmation
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.xpath((".//*[@id='asu_footer']/ul/li[6]/a"))));
+			if (driver
+					.getPageSource()
+					.contains(
+							"Thank you for your interest in ASU. An ASU representative will contact you soon!")) {
+				cell = (XSSFCell) cells.next();
+				cell.setCellValue("True");
+			}
+
+			FileOutputStream fileOut = new FileOutputStream(
+					"US_Names_Addresses.xlsx");
+			workBook.write(fileOut);
+			fileOut.close();
+
+			// Open Page, Log in, Start the form
+			driver.get("https://aarontest-qa.asu.edu/content/accountancy-macc");
+
+			// Wait for the page to load up!
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By
+					.id("edit-submit")));
+
+			// Sleep for bot
+			Thread.sleep(20000);
 		}
 
 		driver.close();
@@ -664,7 +1853,13 @@ public class FormAutomation extends JDialog {
 		String[] items = {
 				"Grad Contact Transfer No Opportunity Veteran With Comment USA",
 				"Grad Contact First Time Grad No Opportunity comment added International",
-				"Grad Contact First Time Grad No Opportunity USA" };
+				"Grad Contact First Time Grad No Opportunity USA",
+				"Contact Transfer No Opportunity Veteran With Comment USA",
+				"Contact First Time Freshman No Opportunity comment added International",
+				"Contact First Time Freshman No Opportunity USA",
+				"MultiStep Grad Contact Transfer No Opportunity Veteran With Comment USA",
+				"MultiStep Grad Contact First Time Grad No Opportunity comment added International",
+				"MultiStep Grad Contact First Time Grad No Opportunity" };
 
 		// Windows builder does not support JRE 7 yet -> hence the warning
 		@SuppressWarnings({ "rawtypes", "unchecked" })
